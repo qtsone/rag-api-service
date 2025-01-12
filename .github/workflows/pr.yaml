@@ -1,0 +1,23 @@
+name: PR Checks
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'docker/**'
+      - 'src/**'
+
+jobs:
+  pr-checks:
+    runs-on: ubuntu-latest
+    environment: pr-checks
+    permissions:
+      pull-requests: write
+    steps:
+    - name: Docker Tests
+      uses: qts-cloud/actions/docker/tests@main
+      with:
+        image-name: ibacalu/rag-api-service
+        dockerfile-path: docker/Dockerfile
+        dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
+        dockerhub-token: ${{ secrets.DOCKERHUB_TOKEN }}
